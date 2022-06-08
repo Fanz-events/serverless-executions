@@ -49,7 +49,7 @@ This example uses the following environment variables:
 ### Triggering the function locally
 
 ```bash
-serverless invoke local --function exec
+serverless invoke local --function exec --data '{...}'
 ```
 
 This will execute the smart contract function from your local machine.
@@ -59,6 +59,8 @@ Great for debugging and testing.
 
 ```bash
 serverless deploy
+or
+serverless deploy --stage production
 ```
 
 ## Thanks

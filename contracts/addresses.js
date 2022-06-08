@@ -1,5 +1,8 @@
+const dotenv = require('dotenv');
+let localConfig = dotenv.config().parsed
+  
 const addresses = {
-  DummyStorage: "0xfb01bf6abde080a278a7bbc62f3ba568380eafed",
+  Admin: process.env.ADMIN_ADDRESS || localConfig.ADMIN_ADDRESS,
 };
 
 module.exports = addresses;
