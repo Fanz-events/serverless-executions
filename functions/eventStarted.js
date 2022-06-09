@@ -42,8 +42,12 @@ exports.handler = async function(event) {
     // Call smart contract function
     const tx = await contract.pauseEvent(event.eventId, overrides)
 
-    const successMessage = `Transaction sent. Hash: ${tx.hash}`;
-    console.log(successMessage)
+    const txReceipt = await provider.waitForTransaction(tx.hash, 14);
+    if (txReceipt && txReceipt.status == 1) {
+      console.log(`Transaction successfully mined. Hash ${tx.hash}`);
+    } else {
+      throw new Error(`Failed TxHash: ${tx.hash}`);
+    }
   } catch (err) {
     const errorMessage = `Transaction failed: ${err.message}`;
     console.error(errorMessage)
