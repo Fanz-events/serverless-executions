@@ -5,11 +5,13 @@ const MAX_GAS_PRICE = ethers.BigNumber.from(4000000000000);
 const dotenv = require('dotenv');
 
 exports.handler = async function(event) {
-  if(!event || !event.eventId || event.eventId < 0) {
+  console.log('Starting...');
+  console.log('Input: ', event);
+
+  if(!event || !event['eventId'] || event['eventId'] < 0) {
     throw new Error ('Invalid input: No event id given.');
   }
 
-  console.log('Starting...');
   // Load Contract ABIs
   const AdminABI = abis.Admin;
   const AdminAddress = addresses.Admin;
@@ -37,12 +39,14 @@ exports.handler = async function(event) {
   console.log('Sending transaction...');
   try {
     // Specify custom tx overrides, such as gas price https://docs.ethers.io/ethers.js/v5-beta/api-contract.html#overrides
-    const overrides = { gasPrice: gas, gasLimit: 50000 };
-
+    const overrides = { gasPrice: gas, gasLimit: 150000 };
+    
     // Call smart contract function
-    const tx = await contract.unpauseEvent(event.eventId, overrides)
+    const tx = await contract.unpauseEvent(event['eventId'], overrides)
+    
+    console.log('Waiting result...');
 
-    const txReceipt = await provider.waitForTransaction(tx.hash, 14);
+    const txReceipt = await provider.waitForTransaction(tx.hash, 1);
     if (txReceipt && txReceipt.status == 1) {
       console.log(`Transaction successfully mined. Hash ${tx.hash}`);
     } else {
